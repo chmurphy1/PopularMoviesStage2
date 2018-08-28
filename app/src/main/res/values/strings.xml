@@ -8,6 +8,7 @@
     <string-array name="search_choices">
         <item>Popular Movies</item>
         <item>Top Movies</item>
+        <item>Favorites</item>
     </string-array>
     <string name="rating">Rating:</string>
     <string name="release">Release Date:</string>
