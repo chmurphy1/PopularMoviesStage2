@@ -49,7 +49,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
     @OnClick(R.id.movie)
     public void onMovieClick(){
         Intent intent = new Intent(context, MovieDetailActivity.class);
-        intent.putExtra("movie", Parcels.wrap(movie));
+        intent.putExtra(Constants.MOVIE_KEY, Parcels.wrap(movie));
         context.startActivity(intent);
     }
 }

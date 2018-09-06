@@ -2,6 +2,9 @@ package murphy.christopher.popularmoviesstage1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -41,16 +44,21 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_movie_detail);
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            setContentView(R.layout.activity_movie_detail_horizontal);
+        }
+        else if(this.getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT){
+            setContentView(R.layout.activity_movie_detail);
+        }
 
         SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
 
         if(savedInstanceState != null){
-            movieDetails = Parcels.unwrap(savedInstanceState.getParcelable("movie"));
+            movieDetails = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_KEY));
         }
         else {
             Intent intent = getIntent();
-            movieDetails = Parcels.unwrap(intent.getParcelableExtra("movie"));
+            movieDetails = Parcels.unwrap(intent.getParcelableExtra(Constants.MOVIE_KEY));
         }
 
         if(movieDetails == null){
@@ -81,6 +89,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("movie", Parcels.wrap(movieDetails));
+        outState.putParcelable(Constants.MOVIE_KEY, Parcels.wrap(movieDetails));
     }
 }
