@@ -40,12 +40,18 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_movie_detail);
 
         SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
 
-        Intent intent = getIntent();
-        movieDetails = Parcels.unwrap(intent.getParcelableExtra("movie"));
+        if(savedInstanceState != null){
+            movieDetails = Parcels.unwrap(savedInstanceState.getParcelable("movie"));
+        }
+        else {
+            Intent intent = getIntent();
+            movieDetails = Parcels.unwrap(intent.getParcelableExtra("movie"));
+        }
 
         if(movieDetails == null){
             //display message to user
@@ -70,5 +76,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         rating.setText(movieDetails.getVote_average()+"");
         releaseDate.setText( sdf.format(movieDetails.getRelease_date()));
         synopsis.setText(movieDetails.getOverview());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("movie", Parcels.wrap(movieDetails));
     }
 }
