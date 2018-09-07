@@ -7,15 +7,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
+
 import murphy.christopher.popularmoviesstage1.R;
 import murphy.christopher.popularmoviesstage1.model.Page;
 import murphy.christopher.popularmoviesstage1.view_holders.MovieViewHolder;
 
-
+@Parcel(Parcel.Serialization.BEAN)
 public class PageAdapter extends RecyclerView.Adapter<MovieViewHolder> {
+    @SerializedName("mPage")
     private Page mPage;
 
-    public PageAdapter(Page result){
+    public PageAdapter(){
+        mPage = new Page();
+    }
+
+    public PageAdapter(Page result) {
         this.mPage = result;
     }
     @NonNull

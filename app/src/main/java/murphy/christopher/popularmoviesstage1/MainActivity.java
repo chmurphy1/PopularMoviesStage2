@@ -11,12 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.parceler.Parcels;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemSelected;
 import murphy.christopher.popularmoviesstage1.adapters.PageAdapter;
 import murphy.christopher.popularmoviesstage1.interfaces.TaskDelegate;
 import murphy.christopher.popularmoviesstage1.model.Page;
+import murphy.christopher.popularmoviesstage1.util.Constants;
 import murphy.christopher.popularmoviesstage1.util.task.MovieTask;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,12 +34,23 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.search_type)
     Spinner mSearchTypes;
 
+    //The items that I'm saving onSaveInstanceState
     private PageAdapter mAdapter;
+    private int spinner_position;
+    private boolean onInitialLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(savedInstanceState != null){
+            mAdapter = Parcels.unwrap(savedInstanceState.getParcelable(Constants.PAGE_ADAPTER));
+            spinner_position= savedInstanceState.getInt(Constants.SPINNER_POSITION);
+        }
+        else{
+            onInitialLoad = true;
+        }
 
         ButterKnife.bind(this);
         setupSpinner();
@@ -44,11 +58,12 @@ public class MainActivity extends AppCompatActivity {
     }
     protected void setupSpinner(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.search_choices, R.layout.custom_spinner);
+                    R.array.search_choices, R.layout.custom_spinner);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mSearchTypes.setAdapter(adapter);
+        mSearchTypes.setSelection(spinner_position);
     }
 
     //This prevents an error where the layout has no adapter set
@@ -57,32 +72,44 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new PageAdapter(new Page());
+
+        if(mAdapter == null) {
+            mAdapter = new PageAdapter();
+        }
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Constants.PAGE_ADAPTER, Parcels.wrap(mAdapter));
+        outState.putInt(Constants.SPINNER_POSITION, mSearchTypes.getSelectedItemPosition());
+    }
+
     @OnItemSelected(R.id.search_type)
-    public void spinnerItemSelected(Spinner spinner, int position) {
-        //Create a gridlayout manager and assign it to the recyclerview
-        GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setHasFixedSize(true);
+    public void spinnerItemSelected(Spinner spinner, final int position) {
+        if ((spinner_position != position) || (onInitialLoad)) {
+            //Create a gridlayout manager and assign it to the recyclerview
+            GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setHasFixedSize(true);
 
-        ConnectivityManager cm = (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            ConnectivityManager cm = (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-        if(activeNetwork != null && activeNetwork.isAvailable() == true
-                && activeNetwork.isConnected()){
-            //Get the data from themoviedb.org
-            new MovieTask(new TaskDelegate() {
-                @Override
-                public void finishProcess(Page result) {
-                    mAdapter = new PageAdapter(result);
-                    mRecyclerView.setAdapter(mAdapter);
-                }
-            }).execute(position);
-        }else{
-            Toast.makeText(this,R.string.network_error,Toast.LENGTH_LONG);
+            if (activeNetwork != null && activeNetwork.isAvailable() == true
+                    && activeNetwork.isConnected()) {
+                //Get the data from themoviedb.org
+                new MovieTask(new TaskDelegate() {
+                    @Override
+                    public void finishProcess(Page result) {
+                        mAdapter = new PageAdapter(result);
+                        mRecyclerView.setAdapter(mAdapter);
+                    }
+                }).execute(position);
+            } else {
+                Toast.makeText(this, R.string.network_error, Toast.LENGTH_LONG);
+            }
         }
     }
 }
