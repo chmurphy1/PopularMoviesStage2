@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/movieDetailPoster"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="338dp"
             android:layout_weight="2"
             android:scaleType="fitStart" />
 
