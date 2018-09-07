@@ -1,11 +1,13 @@
 package murphy.christopher.popularmoviesstage1;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -38,15 +40,32 @@ public class MainActivity extends AppCompatActivity {
     private PageAdapter mAdapter;
     private int spinner_position;
     private boolean onInitialLoad;
+    private GridLayoutManager mLayoutManager;
+    private boolean isHorizontal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Create a gridlayout manager and assign it to the recyclerview
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            mLayoutManager = new GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false);
+            isHorizontal = true;
+        }
+        else if(this.getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT){
+            mLayoutManager = new GridLayoutManager(this, 2);
+        }
+
         if(savedInstanceState != null){
             mAdapter = Parcels.unwrap(savedInstanceState.getParcelable(Constants.PAGE_ADAPTER));
             spinner_position= savedInstanceState.getInt(Constants.SPINNER_POSITION);
+
+            if(isHorizontal){
+                mAdapter.setHorizontal(isHorizontal);
+            } else{
+                mAdapter.setHorizontal(isHorizontal);
+            }
         }
         else{
             onInitialLoad = true;
@@ -69,12 +88,11 @@ public class MainActivity extends AppCompatActivity {
     //This prevents an error where the layout has no adapter set
     protected void setupRecyclerView(){
         //Create a gridlayout manager and assign it to the recyclerview
-        GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
         if(mAdapter == null) {
-            mAdapter = new PageAdapter();
+            mAdapter = new PageAdapter(isHorizontal);
         }
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -89,8 +107,6 @@ public class MainActivity extends AppCompatActivity {
     @OnItemSelected(R.id.search_type)
     public void spinnerItemSelected(Spinner spinner, final int position) {
         if ((spinner_position != position) || (onInitialLoad)) {
-            //Create a gridlayout manager and assign it to the recyclerview
-            GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setHasFixedSize(true);
 
@@ -103,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 new MovieTask(new TaskDelegate() {
                     @Override
                     public void finishProcess(Page result) {
-                        mAdapter = new PageAdapter(result);
+                        mAdapter = new PageAdapter(result, isHorizontal );
                         mRecyclerView.setAdapter(mAdapter);
                     }
                 }).execute(position);

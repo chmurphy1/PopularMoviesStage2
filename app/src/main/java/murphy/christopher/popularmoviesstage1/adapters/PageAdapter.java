@@ -20,11 +20,21 @@ public class PageAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     @SerializedName("mPage")
     private Page mPage;
 
+    @SerializedName("isHorizontal")
+    private boolean isHorizontal;
+
     public PageAdapter(){
+        this.isHorizontal = false;
         mPage = new Page();
     }
 
-    public PageAdapter(Page result) {
+    public PageAdapter(boolean isHorizontal){
+        this.isHorizontal = isHorizontal;
+        mPage = new Page();
+    }
+
+    public PageAdapter(Page result, boolean isHorizontal) {
+        this.isHorizontal = isHorizontal;
         this.mPage = result;
     }
     @NonNull
@@ -32,7 +42,15 @@ public class PageAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
         LayoutInflater mInflater = LayoutInflater.from(context);
-        View v = mInflater.inflate(R.layout.images, viewGroup,false);
+        View v;
+
+        if(isHorizontal){
+            v = mInflater.inflate(R.layout.images_horizontal, viewGroup,false);
+        }
+        else{
+            v = mInflater.inflate(R.layout.images, viewGroup,false);
+        }
+
         return new MovieViewHolder(v);
     }
 
@@ -44,5 +62,9 @@ public class PageAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     @Override
     public int getItemCount() {
         return mPage.getResults().size();
+    }
+
+    public void setHorizontal(boolean horizontal) {
+        isHorizontal = horizontal;
     }
 }
