@@ -39,9 +39,13 @@ public class MainActivity extends AppCompatActivity {
     //The items that I'm saving onSaveInstanceState
     private PageAdapter mAdapter;
     private int spinner_position;
-    private boolean onInitialLoad;
     private GridLayoutManager mLayoutManager;
     private boolean isHorizontal;
+
+    //This will be changed the moment a user interacts with
+    //the user interface which will prevent unnecessary
+    // networks calls.
+    private boolean onUserInteraction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +68,10 @@ public class MainActivity extends AppCompatActivity {
             mAdapter.setHorizontal(isHorizontal);
         }
         else{
-            onInitialLoad = true;
+            //Set this to true on the initial load so the
+            //recycler view is populated.
+            onUserInteraction = true;
         }
-
         ButterKnife.bind(this);
         setupSpinner();
         setupRecyclerView();
@@ -100,9 +105,15 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt(Constants.SPINNER_POSITION, mSearchTypes.getSelectedItemPosition());
     }
 
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        this.onUserInteraction = true;
+    }
+
     @OnItemSelected(R.id.search_type)
     public void spinnerItemSelected(Spinner spinner, final int position) {
-        if ((spinner_position != position) || (onInitialLoad)) {
+        if (onUserInteraction) {
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setHasFixedSize(true);
 
