@@ -60,12 +60,8 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState != null){
             mAdapter = Parcels.unwrap(savedInstanceState.getParcelable(Constants.PAGE_ADAPTER));
             spinner_position= savedInstanceState.getInt(Constants.SPINNER_POSITION);
-
-            if(isHorizontal){
-                mAdapter.setHorizontal(isHorizontal);
-            } else{
-                mAdapter.setHorizontal(isHorizontal);
-            }
+            //set the position of the screen to either vertical or horizontal
+            mAdapter.setHorizontal(isHorizontal);
         }
         else{
             onInitialLoad = true;
