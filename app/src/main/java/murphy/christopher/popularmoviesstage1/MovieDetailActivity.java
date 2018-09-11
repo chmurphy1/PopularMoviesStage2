@@ -47,17 +47,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         //Set the title of the activity screen
         this.setTitle(movieDetails.getOriginal_title());
 
-        Bundle arguements = new Bundle();
-        arguements.putParcelable(Constants.MOVIE_KEY, Parcels.wrap(movieDetails));
-        arguements.putBoolean(Constants.SCREEN_POSITION_KEY, isHorizontal);
-
-        MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
-        movieDetailFragment.setArguments(arguements);
-
-        adapter = new MovieDetailsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(movieDetailFragment);
-        adapter.addFragment(new MovieReviewsFragment());
-        adapter.addFragment(new MovieTrailersFragment());
+        adapter = new MovieDetailsPagerAdapter(getSupportFragmentManager(),  movieDetails, isHorizontal);
         movieDetailPager.setAdapter(adapter);
         movieDetailsTabLayout.setupWithViewPager(movieDetailPager);
 
