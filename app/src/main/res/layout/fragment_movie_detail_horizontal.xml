@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        tools:context=".MovieDetailActivity"
+        android:background="@color/colorBackground">
+
+        <ImageView
+            android:id="@+id/movieDetailPoster"
+            android:layout_width="match_parent"
+            android:layout_height="292dp"
+            android:layout_weight="4"
+            android:scaleType="fitStart"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:paddingLeft="8dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="16dp"
+                    android:text="@string/rating"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/colorText"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/rating"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="3dp"
+                    android:text="TextView"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorText"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="16dp"
+                    android:text="@string/release"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/colorText"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/release_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="3dp"
+                    android:text="TextView"
+                    android:textColor="@color/colorText"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/synopsis"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="80"
+                android:paddingBottom="10dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="12dp"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
