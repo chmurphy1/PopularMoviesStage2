@@ -13,4 +13,9 @@
     <string name="rating">Rating:</string>
     <string name="release">Release Date:</string>
     <string name="network_error">There was a problem with the connection, please try again later.</string>
+
+    <!-- String Values for the tabs-->
+    <string name="movieDetailTab">Details</string>
+    <string name="movieReviewTab">Reviews</string>
+    <string name="movieTrailerTab">Trailers</string>
 </resources>
