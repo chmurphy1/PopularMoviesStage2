@@ -11,13 +11,14 @@
             android:id="@+id/movieDetailsTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/tab_drawable"
+            app:tabBackground="@drawable/tab_drawable"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="0dp"
             app:tabTextColor="@color/colorText"
             app:tabGravity="fill"
-            app:tabIndicatorColor="@color/colorPrimaryDark"
+            app:tabIndicatorColor="@android:color/transparent"
             app:tabSelectedTextColor="@color/colorText">
 
             <android.support.design.widget.TabItem
