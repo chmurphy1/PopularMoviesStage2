@@ -1,9 +1,11 @@
 package murphy.christopher.popularmoviesstage1.model;
 
 import com.google.gson.annotations.SerializedName;
-
+import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 import java.util.ArrayList;
 
+@Parcel(Parcel.Serialization.BEAN)
 public class Page {
     @SerializedName("page")
     private int page;
@@ -24,7 +26,11 @@ public class Page {
         this.results = new ArrayList<>();
     }
 
-    public Page(int page, int total_results, int total_pages, ArrayList<Movie> results) {
+    @ParcelConstructor
+    public Page(int page,
+                int total_results,
+                int total_pages,
+                ArrayList<Movie> results) {
         this.page = page;
         this.total_results = total_results;
         this.total_pages = total_pages;
