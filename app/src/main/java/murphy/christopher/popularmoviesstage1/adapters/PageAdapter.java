@@ -17,10 +17,8 @@ import murphy.christopher.popularmoviesstage1.view_holders.MovieViewHolder;
 
 @Parcel(Parcel.Serialization.BEAN)
 public class PageAdapter extends RecyclerView.Adapter<MovieViewHolder> {
-    @SerializedName("mPage")
-    private Page mPage;
 
-    @SerializedName("isHorizontal")
+    private Page mPage;
     private boolean isHorizontal;
 
     public PageAdapter(){
