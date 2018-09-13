@@ -17,7 +17,7 @@ public class MovieReviews {
     private int page;
 
     @SerializedName("results")
-    private ArrayList<TrailerResults> results;
+    private ArrayList<ReviewResults> results;
 
     @SerializedName("total_pages")
     private int total_pages;
@@ -36,7 +36,7 @@ public class MovieReviews {
     @ParcelConstructor
     public MovieReviews(int id,
                         int page,
-                        ArrayList<TrailerResults> results,
+                        ArrayList<ReviewResults> results,
                         int total_pages,
                         int total_results){
         this.id = id;
@@ -62,11 +62,11 @@ public class MovieReviews {
         this.page = page;
     }
 
-    public ArrayList<TrailerResults> getResults() {
+    public ArrayList<ReviewResults> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<TrailerResults> results) {
+    public void setResults(ArrayList<ReviewResults> results) {
         this.results = results;
     }
 
