@@ -21,10 +21,10 @@ public interface GetMovieDataService{
     Call<Page> getTopRatedMovies(@Query(value="api_key") String key);
 
     //This will get the trailers for the movies
-    @GET("/movie/{id}/videos")
+    @GET("/3/movie/{id}/videos")
     Call<MovieTrailer> getMovieTrailer(@Path("id") int id, @Query(value="api_key") String key);
 
     //This will get the reviews for the movie
-    @GET("/movie/{id}/reviews")
+    @GET("/3/movie/{id}/reviews")
     Call<MovieReviews> getMovieReviews(@Path("id") int id, @Query(value="api_key") String key);
 }
