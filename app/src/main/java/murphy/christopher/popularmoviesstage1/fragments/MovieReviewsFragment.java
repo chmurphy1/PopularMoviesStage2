@@ -1,20 +1,26 @@
 package murphy.christopher.popularmoviesstage1.fragments;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import org.parceler.Parcels;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import murphy.christopher.popularmoviesstage1.BuildConfig;
+import murphy.christopher.popularmoviesstage1.R;
+import murphy.christopher.popularmoviesstage1.adapters.ReviewAdapter;
 import murphy.christopher.popularmoviesstage1.interfaces.GetMovieDataService;
 import murphy.christopher.popularmoviesstage1.model.MovieReviews;
+import murphy.christopher.popularmoviesstage1.model.ReviewResults;
 import murphy.christopher.popularmoviesstage1.util.Constants;
 import murphy.christopher.popularmoviesstage1.util.RetrofitUtil;
 import retrofit2.Call;
@@ -24,9 +30,11 @@ import retrofit2.Retrofit;
 
 public class MovieReviewsFragment extends Fragment {
 
-    private boolean isHorizontal;
     private int movieId;
     private MovieReviews reviews;
+
+    @BindView(R.id.ReviewRecycler)
+    RecyclerView mReviewRecylcer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,34 +42,40 @@ public class MovieReviewsFragment extends Fragment {
 
         Bundle args = this.getArguments();
         if((args != null) && (savedInstanceState == null)){
-            this.isHorizontal = args.getBoolean(Constants.SCREEN_POSITION_KEY);
             this.movieId = args.getInt(Constants.MOVIE_ID);
-            getMovieReviews(this.movieId);
         }else if(savedInstanceState != null){
-            this.isHorizontal = savedInstanceState.getBoolean(Constants.SCREEN_POSITION_KEY);
             this.movieId = savedInstanceState.getInt(Constants.MOVIE_ID);
             this.reviews = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_REVIEWS));
         }
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View reviewView = inflater.inflate(R.layout.fragment_movie_reviews,container,false);
+        ButterKnife.bind(this, reviewView);
+
+        return reviewView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        LinearLayoutManager layoutmanager = new LinearLayoutManager(getContext());
+        mReviewRecylcer.setLayoutManager(layoutmanager);
+        mReviewRecylcer.setHasFixedSize(true);
+        mReviewRecylcer.setAdapter(new ReviewAdapter());
+
+        getMovieReviews(this.movieId);
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putBoolean(Constants.SCREEN_POSITION_KEY, isHorizontal);
         outState.putInt(Constants.MOVIE_ID, movieId);
         outState.putParcelable(Constants.MOVIE_REVIEWS, Parcels.wrap(reviews));
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            isHorizontal = true;
-        }
-        else{
-            isHorizontal = false;
-        }
     }
 
     public void getMovieReviews(int id){
@@ -78,6 +92,13 @@ public class MovieReviewsFragment extends Fragment {
                 @Override
                 public void onResponse(Call<MovieReviews> call, Response<MovieReviews> response) {
                     reviews = response.body();
+
+                    if(reviews.getResults().size() == 0){
+                        ReviewResults noResults = new ReviewResults(Constants.NO_REVIEWS);
+                        reviews.getResults().add(noResults);
+                    }
+                    ReviewAdapter ra = new ReviewAdapter(reviews);
+                    mReviewRecylcer.setAdapter(ra);
                 }
 
                 @Override

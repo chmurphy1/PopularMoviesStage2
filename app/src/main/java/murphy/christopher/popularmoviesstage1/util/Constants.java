@@ -16,6 +16,7 @@ public class Constants {
     public static final String MOVIE_ID = "movie_id";
     public static final String MOVIE_REVIEWS = "movie_reviews";
     public static final String MOVIE_TRAILERS = "movie_trailers";
+    public static final String NO_REVIEWS = "No available reviews";
 
     public static final int FAVORITES = 2;
     public static final int TOP_RATED = 1;

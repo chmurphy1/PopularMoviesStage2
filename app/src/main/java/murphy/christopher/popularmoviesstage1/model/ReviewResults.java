@@ -26,6 +26,13 @@ public class ReviewResults {
         this.url = "";
     }
 
+    public ReviewResults(String content){
+        this.id = "";
+        this.author = "";
+        this.content = content;
+        this.url = "";
+    }
+
     @ParcelConstructor
     public ReviewResults(String id,
                          String author,
