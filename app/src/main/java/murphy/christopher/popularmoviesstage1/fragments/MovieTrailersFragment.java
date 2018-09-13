@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
+import org.parceler.Parcels;
+
 import murphy.christopher.popularmoviesstage1.BuildConfig;
 import murphy.christopher.popularmoviesstage1.interfaces.GetMovieDataService;
 import murphy.christopher.popularmoviesstage1.model.MovieTrailer;
@@ -35,6 +38,7 @@ public class MovieTrailersFragment extends Fragment {
         }else if(savedInstanceState != null){
             this.isHorizontal = savedInstanceState.getBoolean(Constants.SCREEN_POSITION_KEY);
             this.movieId = savedInstanceState.getInt(Constants.MOVIE_ID);
+            this.trailers = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_TRAILERS));
         }
     }
     @Override
@@ -43,6 +47,7 @@ public class MovieTrailersFragment extends Fragment {
 
         outState.putBoolean(Constants.SCREEN_POSITION_KEY, isHorizontal);
         outState.putInt(Constants.MOVIE_ID, movieId);
+        outState.putParcelable(Constants.MOVIE_TRAILERS, Parcels.wrap(trailers));
     }
 
     @Override

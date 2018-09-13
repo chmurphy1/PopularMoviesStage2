@@ -5,9 +5,13 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
+import org.parceler.Parcels;
+
 import murphy.christopher.popularmoviesstage1.BuildConfig;
 import murphy.christopher.popularmoviesstage1.interfaces.GetMovieDataService;
 import murphy.christopher.popularmoviesstage1.model.MovieReviews;
@@ -36,6 +40,7 @@ public class MovieReviewsFragment extends Fragment {
         }else if(savedInstanceState != null){
             this.isHorizontal = savedInstanceState.getBoolean(Constants.SCREEN_POSITION_KEY);
             this.movieId = savedInstanceState.getInt(Constants.MOVIE_ID);
+            this.reviews = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_REVIEWS));
         }
     }
     @Override
@@ -44,6 +49,7 @@ public class MovieReviewsFragment extends Fragment {
 
         outState.putBoolean(Constants.SCREEN_POSITION_KEY, isHorizontal);
         outState.putInt(Constants.MOVIE_ID, movieId);
+        outState.putParcelable(Constants.MOVIE_REVIEWS, Parcels.wrap(reviews));
     }
 
     @Override
