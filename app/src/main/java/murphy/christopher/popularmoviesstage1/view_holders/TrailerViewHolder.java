@@ -24,7 +24,7 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder {
     TextView trailerDescription;
 
     @BindView(R.id.trailerThumbnail)
-    ImageView thumbnail;
+    YouTubeThumbnailView thumbnail;
 
     private Context context;
 
@@ -36,6 +36,35 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder {
 
     public void bind( final TrailerResults results) {
         trailerDescription.setText(results.getName());
+
+
+        //See youtube api for more details
+        //https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubeThumbnailLoader
+        thumbnail.initialize(BuildConfig.YOUTUBE_API_KEY, new YouTubeThumbnailView.OnInitializedListener() {
+            @Override
+            public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
+                youTubeThumbnailLoader.setVideo(results.getKey());
+
+                youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
+
+                    @Override
+                    public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
+                        youTubeThumbnailLoader.release();
+                    }
+
+                    @Override
+                    public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView,
+                                                 YouTubeThumbnailLoader.ErrorReason errorReason) {
+                        youTubeThumbnailLoader.release();
+                    }
+                });
+            }
+
+            @Override
+            public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
+
+            }
+        });
 
     }
 }
