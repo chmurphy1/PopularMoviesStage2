@@ -44,20 +44,6 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
                 youTubeThumbnailLoader.setVideo(results.getKey());
-
-                youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-
-                    @Override
-                    public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                        youTubeThumbnailLoader.release();
-                    }
-
-                    @Override
-                    public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView,
-                                                 YouTubeThumbnailLoader.ErrorReason errorReason) {
-                        youTubeThumbnailLoader.release();
-                    }
-                });
             }
 
             @Override
