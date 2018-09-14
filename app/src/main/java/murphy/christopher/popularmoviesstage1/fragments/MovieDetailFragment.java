@@ -52,12 +52,20 @@ public class MovieDetailFragment extends Fragment {
 
         Bundle args = this.getArguments();
         if((args != null) && (savedInstanceState == null)){
-            this.isHorizontal = args.getBoolean(Constants.SCREEN_POSITION_KEY);
+            //this.isHorizontal = args.getBoolean(Constants.SCREEN_POSITION_KEY);
             movieDetails = Parcels.unwrap(args.getParcelable(Constants.MOVIE_KEY));
         }else if(savedInstanceState != null){
-            this.isHorizontal = savedInstanceState.getBoolean(Constants.SCREEN_POSITION_KEY);
+            //this.isHorizontal = savedInstanceState.getBoolean(Constants.SCREEN_POSITION_KEY);
             movieDetails = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_KEY));
         }
+
+        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            this.isHorizontal = true;
+        }
+        else{
+            this.isHorizontal = false;
+        }
+
     }
 
     @Nullable
@@ -103,18 +111,5 @@ public class MovieDetailFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(Constants.MOVIE_KEY, Parcels.wrap(movieDetails));
-        outState.putBoolean(Constants.SCREEN_POSITION_KEY, isHorizontal);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            isHorizontal = true;
-        }
-        else{
-            isHorizontal = false;
-        }
     }
 }
