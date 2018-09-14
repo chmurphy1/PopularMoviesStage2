@@ -20,10 +20,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
 
     public ReviewAdapter(MovieReviews result) {
         this.reviews = result;
-
-        if(reviews.getResults().size() == 0){
-
-        }
     }
 
     @NonNull

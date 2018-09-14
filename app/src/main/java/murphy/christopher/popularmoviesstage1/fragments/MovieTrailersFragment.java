@@ -1,17 +1,24 @@
 package murphy.christopher.popularmoviesstage1.fragments;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.parceler.Parcels;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import murphy.christopher.popularmoviesstage1.BuildConfig;
+import murphy.christopher.popularmoviesstage1.R;
+import murphy.christopher.popularmoviesstage1.adapters.TrailerAdapter;
 import murphy.christopher.popularmoviesstage1.interfaces.GetMovieDataService;
 import murphy.christopher.popularmoviesstage1.model.MovieTrailer;
 import murphy.christopher.popularmoviesstage1.util.Constants;
@@ -22,9 +29,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MovieTrailersFragment extends Fragment {
-    private boolean isHorizontal;
     private int movieId;
     private MovieTrailer trailers;
+
+    @BindView(R.id.TrailerRecycler)
+    RecyclerView mTrailerRecylcer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,11 +41,9 @@ public class MovieTrailersFragment extends Fragment {
 
         Bundle args = this.getArguments();
         if((args != null) && (savedInstanceState == null)){
-            this.isHorizontal = args.getBoolean(Constants.SCREEN_POSITION_KEY);
             this.movieId = args.getInt(Constants.MOVIE_ID);
             getMovieTrailers(this.movieId);
         }else if(savedInstanceState != null){
-            this.isHorizontal = savedInstanceState.getBoolean(Constants.SCREEN_POSITION_KEY);
             this.movieId = savedInstanceState.getInt(Constants.MOVIE_ID);
             this.trailers = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_TRAILERS));
         }
@@ -45,22 +52,31 @@ public class MovieTrailersFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putBoolean(Constants.SCREEN_POSITION_KEY, isHorizontal);
         outState.putInt(Constants.MOVIE_ID, movieId);
         outState.putParcelable(Constants.MOVIE_TRAILERS, Parcels.wrap(trailers));
     }
 
+    @Nullable
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View trailerView = inflater.inflate(R.layout.fragment_movie_trailers,container,false);
+        ButterKnife.bind(this, trailerView);
 
-        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            isHorizontal = true;
-        }
-        else{
-            isHorizontal = false;
-        }
+        return trailerView;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        LinearLayoutManager layoutmanager = new LinearLayoutManager(getContext());
+        mTrailerRecylcer.setLayoutManager(layoutmanager);
+        mTrailerRecylcer.setHasFixedSize(true);
+        mTrailerRecylcer.setAdapter(new TrailerAdapter());
+
+        getMovieTrailers(this.movieId);
+    }
+
 
     public void getMovieTrailers(int id){
         //Get a retrofit instance for this task
@@ -76,6 +92,11 @@ public class MovieTrailersFragment extends Fragment {
                 @Override
                 public void onResponse(Call<MovieTrailer> call, Response<MovieTrailer> response) {
                     trailers = response.body();
+
+                    if(trailers != null){
+                        TrailerAdapter ta = new TrailerAdapter(trailers);
+                        mTrailerRecylcer.setAdapter(ta);
+                    }
                 }
 
                 @Override
