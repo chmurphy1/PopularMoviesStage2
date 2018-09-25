@@ -41,8 +41,12 @@ public class MovieDetailActivity extends AppCompatActivity {
             isHorizontal = true;
         }
 
-        Intent intent = getIntent();
-        movieDetails = Parcels.unwrap(intent.getParcelableExtra(Constants.MOVIE_KEY));
+        if(savedInstanceState != null){
+            movieDetails = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_KEY));
+        }else {
+            Intent intent = getIntent();
+            movieDetails = Parcels.unwrap(intent.getParcelableExtra(Constants.MOVIE_KEY));
+        }
 
         //Set the title of the activity screen
         this.setTitle(movieDetails.getOriginal_title());
@@ -55,5 +59,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         movieDetailsTabLayout.getTabAt(0).setText(R.string.movieDetailTab);
         movieDetailsTabLayout.getTabAt(1).setText(R.string.movieReviewTab);
         movieDetailsTabLayout.getTabAt(2).setText(R.string.movieTrailerTab);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Constants.MOVIE_KEY, Parcels.wrap(movieDetails));
     }
 }
