@@ -27,7 +27,6 @@ import murphy.christopher.popularmoviesstage1.util.Constants;
 
 public class MovieDetailFragment extends Fragment {
 
-    private boolean isHorizontal;
     private Movie movieDetails;
 
     @BindView(R.id.movieDetailPoster)
@@ -52,34 +51,16 @@ public class MovieDetailFragment extends Fragment {
 
         Bundle args = this.getArguments();
         if((args != null) && (savedInstanceState == null)){
-            //this.isHorizontal = args.getBoolean(Constants.SCREEN_POSITION_KEY);
             movieDetails = Parcels.unwrap(args.getParcelable(Constants.MOVIE_KEY));
         }else if(savedInstanceState != null){
-            //this.isHorizontal = savedInstanceState.getBoolean(Constants.SCREEN_POSITION_KEY);
             movieDetails = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_KEY));
         }
-
-        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            this.isHorizontal = true;
-        }
-        else{
-            this.isHorizontal = false;
-        }
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View movieView;
-
-        if(isHorizontal){
-            movieView = inflater.inflate(R.layout.fragment_movie_detail_horizontal,container,false);
-        }
-        else{
-            movieView = inflater.inflate(R.layout.fragment_movie_detail,container,false);
-        }
+        View movieView = inflater.inflate(R.layout.fragment_movie_detail,container,false);
         ButterKnife.bind(this, movieView);
 
         return movieView;
