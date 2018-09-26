@@ -28,7 +28,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private MovieDetailsPagerAdapter adapter;
 
-    private boolean isHorizontal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +35,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_details);
 
         ButterKnife.bind(this);
-
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            isHorizontal = true;
-        }
 
         if(savedInstanceState != null){
             movieDetails = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_KEY));
@@ -51,7 +46,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         //Set the title of the activity screen
         this.setTitle(movieDetails.getOriginal_title());
 
-        adapter = new MovieDetailsPagerAdapter(getSupportFragmentManager(),  movieDetails, isHorizontal);
+        adapter = new MovieDetailsPagerAdapter(getSupportFragmentManager(),  movieDetails);
         movieDetailPager.setAdapter(adapter);
         movieDetailsTabLayout.setupWithViewPager(movieDetailPager);
 

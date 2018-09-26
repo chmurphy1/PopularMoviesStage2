@@ -13,14 +13,11 @@ import murphy.christopher.popularmoviesstage1.model.Movie;
 import murphy.christopher.popularmoviesstage1.util.Constants;
 
 public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
-
     private Movie movieDetails;
-    private boolean isHorizontal;
 
-    public MovieDetailsPagerAdapter(FragmentManager manager, Movie details, boolean isHorizontal){
+    public MovieDetailsPagerAdapter(FragmentManager manager, Movie details){
         super(manager);
         this.movieDetails = details;
-        this.isHorizontal = isHorizontal;
     }
 
     @Override
@@ -33,18 +30,15 @@ public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 returnFragment = new MovieDetailFragment();
                 arguements.putParcelable(Constants.MOVIE_KEY, Parcels.wrap(movieDetails));
-                arguements.putBoolean(Constants.SCREEN_POSITION_KEY, isHorizontal);
                 returnFragment.setArguments(arguements);
                 break;
             case 1:
                 returnFragment = new MovieReviewsFragment();
-                arguements.putBoolean(Constants.SCREEN_POSITION_KEY, isHorizontal);
                 arguements.putInt(Constants.MOVIE_ID, movieDetails.getId());
                 returnFragment.setArguments(arguements);
                 break;
             case 2:
                 returnFragment = new MovieTrailersFragment();
-                arguements.putBoolean(Constants.SCREEN_POSITION_KEY, isHorizontal);
                 arguements.putInt(Constants.MOVIE_ID, movieDetails.getId());
                 returnFragment.setArguments(arguements);
                 break;
