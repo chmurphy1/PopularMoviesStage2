@@ -1,12 +1,14 @@
 package murphy.christopher.popularmoviesstage1.fragments;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -69,8 +71,16 @@ public class MovieTrailersFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        LinearLayoutManager layoutmanager = new LinearLayoutManager(getContext());
-        mTrailerRecylcer.setLayoutManager(layoutmanager);
+        //Create a gridlayout manager and assign it to the recyclerview
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            GridLayoutManager layoutmanager = new GridLayoutManager(getContext(), 1, LinearLayoutManager.HORIZONTAL, false);
+            mTrailerRecylcer.setLayoutManager(layoutmanager);
+        }
+        else if(this.getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT){
+            LinearLayoutManager layoutmanager = new LinearLayoutManager(getContext());
+            mTrailerRecylcer.setLayoutManager(layoutmanager);
+        }
+
         mTrailerRecylcer.setHasFixedSize(true);
         mTrailerRecylcer.setAdapter(new TrailerAdapter());
 
