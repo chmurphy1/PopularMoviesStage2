@@ -40,33 +40,34 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder {
         this.results = r;
         trailerDescription.setText(results.getName());
 
-        //See youtube api for more details
-        //https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubeThumbnailLoader
-        thumbnail.initialize(BuildConfig.YOUTUBE_API_KEY, new YouTubeThumbnailView.OnInitializedListener() {
-            @Override
-            public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                youTubeThumbnailLoader.setVideo(results.getKey());
+        if(!this.results.getKey().equals(Constants.BLANKS)) {
+            //See youtube api for more details
+            //https://developers.google.com/youtube/android/player/reference/com/google/android/youtube/player/YouTubeThumbnailLoader
+            thumbnail.initialize(BuildConfig.YOUTUBE_API_KEY, new YouTubeThumbnailView.OnInitializedListener() {
+                @Override
+                public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
+                    youTubeThumbnailLoader.setVideo(results.getKey());
 
-                //release the thumbnail to prevent errors
-                youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-                    @Override
-                    public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                        youTubeThumbnailLoader.release();
-                    }
+                    //release the thumbnail to prevent errors
+                    youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
+                        @Override
+                        public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
+                            youTubeThumbnailLoader.release();
+                        }
 
-                    @Override
-                    public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-                        Toast.makeText(context, R.string.thumbnailErrorMessage, Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+                        @Override
+                        public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
+                            Toast.makeText(context, R.string.thumbnailErrorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
 
-            @Override
-            public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-                Toast.makeText(context, R.string.thumbnailErrorMessage, Toast.LENGTH_LONG).show();
-            }
-        });
-
+                @Override
+                public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
+                    Toast.makeText(context, R.string.thumbnailErrorMessage, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
      @OnClick(R.id.trailerThumbnail)

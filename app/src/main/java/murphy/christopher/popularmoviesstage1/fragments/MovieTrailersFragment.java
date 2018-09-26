@@ -23,6 +23,7 @@ import murphy.christopher.popularmoviesstage1.R;
 import murphy.christopher.popularmoviesstage1.adapters.TrailerAdapter;
 import murphy.christopher.popularmoviesstage1.interfaces.GetMovieDataService;
 import murphy.christopher.popularmoviesstage1.model.MovieTrailer;
+import murphy.christopher.popularmoviesstage1.model.TrailerResults;
 import murphy.christopher.popularmoviesstage1.util.Constants;
 import murphy.christopher.popularmoviesstage1.util.RetrofitUtil;
 import retrofit2.Call;
@@ -104,6 +105,11 @@ public class MovieTrailersFragment extends Fragment {
                     trailers = response.body();
 
                     if(trailers != null){
+                        if(trailers.getResults().size() == 0){
+                            TrailerResults noTrailerResults = new TrailerResults();
+                            noTrailerResults.setName(Constants.NO_TRAILERS);
+                            trailers.getResults().add(noTrailerResults);
+                        }
                         TrailerAdapter ta = new TrailerAdapter(trailers);
                         mTrailerRecylcer.setAdapter(ta);
                     }
