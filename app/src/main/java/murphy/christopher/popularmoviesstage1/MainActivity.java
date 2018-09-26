@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private PageAdapter mAdapter;
     private int spinner_position;
     private GridLayoutManager mLayoutManager;
-    private boolean isHorizontal;
 
     //This will be changed the moment a user interacts with
     //the user interface which will prevent unnecessary
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         //Create a gridlayout manager and assign it to the recyclerview
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             mLayoutManager = new GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false);
-            isHorizontal = true;
         }
         else if(this.getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT){
             mLayoutManager = new GridLayoutManager(this, 2);
@@ -64,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState != null){
             mAdapter = Parcels.unwrap(savedInstanceState.getParcelable(Constants.PAGE_ADAPTER));
             spinner_position= savedInstanceState.getInt(Constants.SPINNER_POSITION);
-            //set the position of the screen to either vertical or horizontal
-            mAdapter.setHorizontal(isHorizontal);
         }
         else{
             //Set this to true on the initial load so the
@@ -93,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
 
         if(mAdapter == null) {
-            mAdapter = new PageAdapter(isHorizontal);
+            mAdapter = new PageAdapter();
         }
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -126,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 new MovieTask(new TaskDelegate() {
                     @Override
                     public void finishProcess(Page result) {
-                        mAdapter = new PageAdapter(result, isHorizontal );
+                        mAdapter = new PageAdapter(result);
                         mRecyclerView.setAdapter(mAdapter);
                     }
                 }).execute(position);
