@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
@@ -54,14 +56,14 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder {
 
                     @Override
                     public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-
+                        Toast.makeText(context, R.string.thumbnailErrorMessage, Toast.LENGTH_LONG).show();
                     }
                 });
             }
 
             @Override
             public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
+                Toast.makeText(context, R.string.thumbnailErrorMessage, Toast.LENGTH_LONG).show();
             }
         });
 

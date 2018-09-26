@@ -3,6 +3,7 @@ package murphy.christopher.popularmoviesstage1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -55,7 +56,7 @@ public class VideoPlayerActivity extends YouTubeBaseActivity implements YouTubeP
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-
+        Toast.makeText(this, R.string.videoErrorMessage, Toast.LENGTH_LONG).show();
     }
 
     protected void onSaveInstanceState(Bundle outState) {
