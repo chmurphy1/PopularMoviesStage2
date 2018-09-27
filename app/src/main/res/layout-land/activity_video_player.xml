@@ -5,22 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/movie_title"
+    <fragment
+        android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+        android:id="@+id/trailer_fragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        android:layout_marginBottom="5dp"
-        android:visibility="gone"
-        />
-
-    <com.google.android.youtube.player.YouTubePlayerView
-        android:id="@+id/trailer_viewer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

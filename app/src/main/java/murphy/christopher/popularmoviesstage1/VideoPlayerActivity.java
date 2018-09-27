@@ -2,27 +2,14 @@ package murphy.christopher.popularmoviesstage1;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-
-import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
-
-import org.parceler.Parcels;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import murphy.christopher.popularmoviesstage1.util.Constants;
 
-public class VideoPlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
-
-    @BindView(R.id.trailer_viewer)
-    YouTubePlayerView player;
-
-    @BindView(R.id.movie_title)
-    Toolbar movieTitle;
+public class VideoPlayerActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener {
 
     private String videoKey;
     private String title;
@@ -31,9 +18,6 @@ public class VideoPlayerActivity extends YouTubeBaseActivity implements YouTubeP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
-
-        ButterKnife.bind(this);
-        player.initialize(BuildConfig.YOUTUBE_API_KEY, this);
 
         if(savedInstanceState != null){
             videoKey = savedInstanceState.getString(Constants.TRAILER_KEY);
@@ -44,7 +28,11 @@ public class VideoPlayerActivity extends YouTubeBaseActivity implements YouTubeP
             videoKey = intent.getStringExtra(Constants.TRAILER_KEY);
             title = intent.getStringExtra(Constants.MOVIE_TITLE);
         }
-        movieTitle.setTitle(title);
+
+        this.setTitle(title);
+
+        YouTubePlayerFragment player = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.trailer_fragment);
+        player.initialize(BuildConfig.YOUTUBE_API_KEY, this);
     }
 
     @Override
@@ -65,4 +53,5 @@ public class VideoPlayerActivity extends YouTubeBaseActivity implements YouTubeP
         outState.putString(Constants.TRAILER_KEY, videoKey);
         outState.putString(Constants.MOVIE_TITLE, title);
     }
+
 }
