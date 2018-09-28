@@ -15,6 +15,7 @@
     <string name="network_error">There was a problem with the connection, please try again later.</string>
     <string name="thumbnailErrorMessage">There was a problem loading the thumbnails, please try again later.</string>
     <string name="videoErrorMessage">There was a problem loading the videos, please try again later.</string>
+    <string name="favorite_button">Favorite Button</string>
     <!-- String Values for the tabs-->
     <string name="movieDetailTab">Details</string>
     <string name="movieReviewTab">Reviews</string>
