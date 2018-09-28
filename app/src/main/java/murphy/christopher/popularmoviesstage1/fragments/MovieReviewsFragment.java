@@ -31,6 +31,7 @@ import retrofit2.Retrofit;
 public class MovieReviewsFragment extends Fragment {
 
     private int movieId;
+
     private MovieReviews reviews;
 
     @BindView(R.id.ReviewRecycler)
@@ -107,6 +108,10 @@ public class MovieReviewsFragment extends Fragment {
                 }
             });
         }
+    }
+
+    public MovieReviews getReviews() {
+        return reviews;
     }
 
     public boolean hasInternetService(){

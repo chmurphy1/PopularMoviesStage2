@@ -93,4 +93,8 @@ public class MovieDetailFragment extends Fragment {
 
         outState.putParcelable(Constants.MOVIE_KEY, Parcels.wrap(movieDetails));
     }
+
+    public Movie getMovieDetails() {
+        return movieDetails;
+    }
 }
