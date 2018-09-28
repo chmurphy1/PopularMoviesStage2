@@ -71,15 +71,15 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.isChecked()){
-            item.setChecked(false);
-            item.setIcon(android.R.drawable.btn_star_big_off);
+        if(item.getItemId() == R.id.favoriteButton) {
+            if (item.isChecked()) {
+                item.setChecked(false);
+                item.setIcon(android.R.drawable.btn_star_big_off);
+            } else {
+                item.setChecked(true);
+                item.setIcon(android.R.drawable.btn_star_big_on);
+            }
         }
-        else{
-            item.setChecked(true);
-            item.setIcon(android.R.drawable.btn_star_big_on);
-        }
-
         return super.onOptionsItemSelected(item);
     }
 }
