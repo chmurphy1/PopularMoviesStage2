@@ -47,6 +47,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         this.setTitle(movieDetails.getOriginal_title());
 
         adapter = new MovieDetailsPagerAdapter(getSupportFragmentManager(),  movieDetails);
+        movieDetailPager.setOffscreenPageLimit(3);
         movieDetailPager.setAdapter(adapter);
         movieDetailsTabLayout.setupWithViewPager(movieDetailPager);
 
