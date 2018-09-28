@@ -2,6 +2,8 @@ package murphy.christopher.popularmoviesstage1;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import org.parceler.Parcels;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import murphy.christopher.popularmoviesstage1.adapters.MovieDetailsPagerAdapter;
@@ -78,8 +83,14 @@ public class MovieDetailActivity extends AppCompatActivity {
             } else {
                 item.setChecked(true);
                 item.setIcon(android.R.drawable.btn_star_big_on);
+                saveMovieData();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveMovieData(){
+        FragmentManager fm = getSupportFragmentManager();
+        List<Fragment> movieDetailFragments = fm.getFragments();
     }
 }
