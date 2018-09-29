@@ -19,7 +19,7 @@ public abstract class PopularMovieDB extends RoomDatabase {
         if(dbInstance == null){
             dbInstance = Room.databaseBuilder(context.getApplicationContext(),
                                               PopularMovieDB.class,
-                                              Constants.DB_NAME).allowMainThreadQueries().build();
+                                              Constants.DB_NAME).build();
         }
         return dbInstance;
     }

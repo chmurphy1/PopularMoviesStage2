@@ -1,6 +1,7 @@
 package murphy.christopher.popularmoviesstage1;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +20,7 @@ import butterknife.ButterKnife;
 import murphy.christopher.popularmoviesstage1.adapters.MovieDetailsPagerAdapter;
 import murphy.christopher.popularmoviesstage1.database.PopularMovieDB;
 import murphy.christopher.popularmoviesstage1.database.entities.MovieEntity;
+import murphy.christopher.popularmoviesstage1.database.utilities.dbExecutor;
 import murphy.christopher.popularmoviesstage1.fragments.MovieDetailFragment;
 import murphy.christopher.popularmoviesstage1.model.Movie;
 import murphy.christopher.popularmoviesstage1.util.Constants;
@@ -100,10 +102,18 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         for(int i = 0; i < movieDetailFragments.size(); i++ ) {
             if (movieDetailFragments.get(i) instanceof MovieDetailFragment) {
-                MovieEntity mEntity = convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
+                final MovieEntity mEntity = convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
 
-                //testing to see if inserting works
-                db.movieDao().insertMovie(mEntity);
+                dbExecutor.getInstance().dbInsertDelete(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            db.movieDao().insertMovie(mEntity);
+                        }catch(SQLiteConstraintException e){
+                            System.err.println(Constants.Favorite_ERROR);
+                        }
+                    }
+                });
             }
         }
     }
@@ -114,10 +124,14 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         for(int i = 0; i < movieDetailFragments.size(); i++ ) {
             if (movieDetailFragments.get(i) instanceof MovieDetailFragment) {
-                MovieEntity mEntity = convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
+                final MovieEntity mEntity = convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
 
-                //testing to see if deleting works
-                db.movieDao().deleteMovie(mEntity);
+                dbExecutor.getInstance().dbInsertDelete(new Runnable() {
+                    @Override
+                    public void run() {
+                        db.movieDao().deleteMovie(mEntity);
+                    }
+                });
             }
         }
     }

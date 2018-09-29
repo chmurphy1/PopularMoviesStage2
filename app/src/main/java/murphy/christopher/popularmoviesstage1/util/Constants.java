@@ -31,4 +31,5 @@ public class Constants {
     //This should be moved into a property file later for
     //localization
     public static final String DATE_FORMAT = "MMMM d, yyyy";
+    public static final String Favorite_ERROR = "The movie is already in your favorites.";
 }
