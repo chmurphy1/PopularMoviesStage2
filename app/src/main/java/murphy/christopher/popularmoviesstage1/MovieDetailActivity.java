@@ -24,6 +24,7 @@ import murphy.christopher.popularmoviesstage1.database.utilities.dbExecutor;
 import murphy.christopher.popularmoviesstage1.fragments.MovieDetailFragment;
 import murphy.christopher.popularmoviesstage1.model.Movie;
 import murphy.christopher.popularmoviesstage1.util.Constants;
+import murphy.christopher.popularmoviesstage1.util.ConversionTools;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -102,9 +103,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         for(int i = 0; i < movieDetailFragments.size(); i++ ) {
             if (movieDetailFragments.get(i) instanceof MovieDetailFragment) {
-                final MovieEntity mEntity = convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
+                final MovieEntity mEntity = ConversionTools.convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
 
-                dbExecutor.getInstance().dbInsertDelete(new Runnable() {
+                dbExecutor.getInstance().getDbThread().execute(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -124,9 +125,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         for(int i = 0; i < movieDetailFragments.size(); i++ ) {
             if (movieDetailFragments.get(i) instanceof MovieDetailFragment) {
-                final MovieEntity mEntity = convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
+                final MovieEntity mEntity = ConversionTools.convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
 
-                dbExecutor.getInstance().dbInsertDelete(new Runnable() {
+                dbExecutor.getInstance().getDbThread().execute(new Runnable() {
                     @Override
                     public void run() {
                         db.movieDao().deleteMovie(mEntity);
@@ -134,21 +135,5 @@ public class MovieDetailActivity extends AppCompatActivity {
                 });
             }
         }
-    }
-
-    private MovieEntity convertToMovieEntity(Movie details){
-        return new MovieEntity( details.getVote_count(),
-                                details.getId(),
-                                details.isVideo(),
-                                details.getVote_average(),
-                                details.getTitle(),
-                                details.getPopularity(),
-                                details.getPoster_path(),
-                                details.getOriginal_language(),
-                                details.getOriginal_title(),
-                                details.getBackdrop_path(),
-                                details.isAdult(),
-                                details.getOverview(),
-                                details.getRelease_date());
     }
 }

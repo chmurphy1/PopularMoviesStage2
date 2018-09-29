@@ -12,17 +12,21 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import org.parceler.Parcels;
-
+import java.util.ArrayList;
+import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemSelected;
 import murphy.christopher.popularmoviesstage1.adapters.PageAdapter;
 import murphy.christopher.popularmoviesstage1.database.PopularMovieDB;
+import murphy.christopher.popularmoviesstage1.database.entities.MovieEntity;
+import murphy.christopher.popularmoviesstage1.database.utilities.dbExecutor;
 import murphy.christopher.popularmoviesstage1.interfaces.TaskDelegate;
+import murphy.christopher.popularmoviesstage1.model.Movie;
 import murphy.christopher.popularmoviesstage1.model.Page;
 import murphy.christopher.popularmoviesstage1.util.Constants;
+import murphy.christopher.popularmoviesstage1.util.ConversionTools;
 import murphy.christopher.popularmoviesstage1.util.task.MovieTask;
 
 public class MainActivity extends AppCompatActivity {
@@ -119,19 +123,38 @@ public class MainActivity extends AppCompatActivity {
 
             ConnectivityManager cm = (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            if(position < Constants.FAVORITES) {
+                if (activeNetwork != null && activeNetwork.isAvailable() == true
+                        && activeNetwork.isConnected()) {
+                    //Get the data from themoviedb.org
+                    new MovieTask(new TaskDelegate() {
+                        @Override
+                        public void finishProcess(Page result) {
+                            mAdapter = new PageAdapter(result);
+                            mRecyclerView.setAdapter(mAdapter);
+                        }
+                    }).execute(position);
+                } else {
+                    Toast.makeText(this, R.string.network_error, Toast.LENGTH_LONG);
+                }
+            }else if(position == Constants.FAVORITES){
+                dbExecutor.getInstance().getDbThread().execute(new Runnable(){
 
-            if (activeNetwork != null && activeNetwork.isAvailable() == true
-                    && activeNetwork.isConnected()) {
-                //Get the data from themoviedb.org
-                new MovieTask(new TaskDelegate() {
                     @Override
-                    public void finishProcess(Page result) {
-                        mAdapter = new PageAdapter(result);
-                        mRecyclerView.setAdapter(mAdapter);
+                    public void run() {
+                        List<MovieEntity> movies = db.movieDao().getAllMovies();
+                        ArrayList<Movie> favoriteMovies = ConversionTools.convertToMovies(movies);
+                        final Page newPage = new Page();
+                        newPage.setResults(favoriteMovies);
+                        runOnUiThread(new Runnable(){
+                            public void run() {
+                                mAdapter = new PageAdapter(newPage);
+                                mRecyclerView.setAdapter(mAdapter);
+                            }
+                        });
+                        movies = null;
                     }
-                }).execute(position);
-            } else {
-                Toast.makeText(this, R.string.network_error, Toast.LENGTH_LONG);
+                });
             }
         }
     }

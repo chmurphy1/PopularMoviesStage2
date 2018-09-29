@@ -101,6 +101,35 @@ public class Movie {
         this.release_date = release_date;
     }
 
+    public Movie(int vote_count,
+                 int id,
+                 boolean video,
+                 double vote_average,
+                 String title,
+                 double popularity,
+                 String poster_path,
+                 String original_language,
+                 String original_title,
+                 String backdrop_path,
+                 boolean adult,
+                 String overview,
+                 Date release_date) {
+        this.vote_count = vote_count;
+        this.id = id;
+        this.video = video;
+        this.vote_average = vote_average;
+        this.title = title;
+        this.popularity = popularity;
+        this.poster_path = poster_path;
+        this.original_language = original_language;
+        this.original_title = original_title;
+        this.genre_ids = new ArrayList<>();
+        this.backdrop_path = backdrop_path;
+        this.adult = adult;
+        this.overview = overview;
+        this.release_date = release_date;
+    }
+
     public int getVote_count() {
         return vote_count;
     }

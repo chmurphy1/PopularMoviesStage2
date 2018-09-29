@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 
 public class dbExecutor {
     private static dbExecutor dbInstance;
+
     final private Executor dbThread;
 
     private dbExecutor(Executor db){
@@ -18,7 +19,7 @@ public class dbExecutor {
         return dbInstance;
     }
 
-    public void dbInsertDelete(Runnable query){
-        dbThread.execute(query);
+    public Executor getDbThread() {
+        return dbThread;
     }
 }

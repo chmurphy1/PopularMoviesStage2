@@ -49,9 +49,6 @@ public class MovieTask extends AsyncTask<Integer, Void, Page>{
            case Constants.POPULAR_MOVIES:
                 page_call = service.getPopularMovies(BuildConfig.MOVIE_DB_API_KEY);
                 break;
-            case Constants.FAVORITES:
-                //add retrofit call
-                break;
             default:
                 //Toast.makeText(App., R.string.network_error,Toast.LENGTH_LONG);
         }
