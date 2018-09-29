@@ -1,5 +1,6 @@
 package murphy.christopher.popularmoviesstage1.database.dao.interfaces;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -11,7 +12,7 @@ import murphy.christopher.popularmoviesstage1.database.entities.MovieEntity;
 public interface MovieDao {
 
     @Query("Select * FROM Movie")
-    List<MovieEntity> getAllMovies();
+    LiveData<List<MovieEntity>> getAllMovies();
 
     @Insert
     void insertMovie(MovieEntity movie);

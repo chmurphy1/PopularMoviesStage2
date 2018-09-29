@@ -1,9 +1,12 @@
 package murphy.christopher.popularmoviesstage1;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -138,21 +141,18 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, R.string.network_error, Toast.LENGTH_LONG);
                 }
             }else if(position == Constants.FAVORITES){
-                dbExecutor.getInstance().getDbThread().execute(new Runnable(){
-
+                final LiveData<List<MovieEntity>> movies = db.movieDao().getAllMovies();
+                movies.observe(this, new Observer<List<MovieEntity>>() {
                     @Override
-                    public void run() {
-                        List<MovieEntity> movies = db.movieDao().getAllMovies();
-                        ArrayList<Movie> favoriteMovies = ConversionTools.convertToMovies(movies);
+                    public void onChanged(@Nullable List<MovieEntity> movieEntities) {
+                        ArrayList<Movie> favoriteMovies = ConversionTools.convertToMovies(movieEntities);
                         final Page newPage = new Page();
                         newPage.setResults(favoriteMovies);
-                        runOnUiThread(new Runnable(){
-                            public void run() {
-                                mAdapter = new PageAdapter(newPage);
-                                mRecyclerView.setAdapter(mAdapter);
-                            }
-                        });
-                        movies = null;
+
+                        if(position == Constants.FAVORITES) {
+                            mAdapter = new PageAdapter(newPage);
+                            mRecyclerView.setAdapter(mAdapter);
+                        }
                     }
                 });
             }
