@@ -38,6 +38,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private MovieDetailsPagerAdapter adapter;
     private PopularMovieDB db;
+    private MovieEntity dbMovieInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +76,36 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_detail_button, menu);
+
+        if(dbMovieInfo == null) {
+
+            dbExecutor.getInstance().getDbThread().execute(new Runnable() {
+                @Override
+                public void run() {
+                    MovieEntity m = db.movieDao().isFavorite(movieDetails.getId());
+
+                    if (m != null) {
+                        dbMovieInfo = m;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                MenuItem fav = menu.getItem(0);
+                                fav.setIcon(android.R.drawable.btn_star_big_on);
+                                fav.setChecked(true);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        else if(dbMovieInfo != null){
+            MenuItem fav = menu.getItem(0);
+            fav.setIcon(android.R.drawable.btn_star_big_on);
+            fav.setChecked(true);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

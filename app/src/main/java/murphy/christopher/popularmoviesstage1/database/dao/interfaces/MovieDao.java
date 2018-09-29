@@ -18,4 +18,7 @@ public interface MovieDao {
 
     @Delete
     void deleteMovie(MovieEntity movie);
+
+    @Query("Select * FROM MOVIE where id = :id")
+    MovieEntity isFavorite(int id);
 }
