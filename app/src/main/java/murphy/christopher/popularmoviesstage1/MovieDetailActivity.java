@@ -17,6 +17,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import murphy.christopher.popularmoviesstage1.adapters.MovieDetailsPagerAdapter;
+import murphy.christopher.popularmoviesstage1.database.PopularMovieDB;
+import murphy.christopher.popularmoviesstage1.database.entities.MovieEntity;
+import murphy.christopher.popularmoviesstage1.fragments.MovieDetailFragment;
 import murphy.christopher.popularmoviesstage1.model.Movie;
 import murphy.christopher.popularmoviesstage1.util.Constants;
 
@@ -31,12 +34,13 @@ public class MovieDetailActivity extends AppCompatActivity {
     ViewPager movieDetailPager;
 
     private MovieDetailsPagerAdapter adapter;
-
+    private PopularMovieDB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+        db = PopularMovieDB.getInstance(getApplicationContext());
 
         ButterKnife.bind(this);
 
@@ -80,6 +84,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             if (item.isChecked()) {
                 item.setChecked(false);
                 item.setIcon(android.R.drawable.btn_star_big_off);
+                deleteMovieData();
             } else {
                 item.setChecked(true);
                 item.setIcon(android.R.drawable.btn_star_big_on);
@@ -92,5 +97,44 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void saveMovieData(){
         FragmentManager fm = getSupportFragmentManager();
         List<Fragment> movieDetailFragments = fm.getFragments();
+
+        for(int i = 0; i < movieDetailFragments.size(); i++ ) {
+            if (movieDetailFragments.get(i) instanceof MovieDetailFragment) {
+                MovieEntity mEntity = convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
+
+                //testing to see if inserting works
+                db.movieDao().insertMovie(mEntity);
+            }
+        }
+    }
+
+    private void deleteMovieData(){
+        FragmentManager fm = getSupportFragmentManager();
+        List<Fragment> movieDetailFragments = fm.getFragments();
+
+        for(int i = 0; i < movieDetailFragments.size(); i++ ) {
+            if (movieDetailFragments.get(i) instanceof MovieDetailFragment) {
+                MovieEntity mEntity = convertToMovieEntity(((MovieDetailFragment) movieDetailFragments.get(i)).getMovieDetails());
+
+                //testing to see if deleting works
+                db.movieDao().deleteMovie(mEntity);
+            }
+        }
+    }
+
+    private MovieEntity convertToMovieEntity(Movie details){
+        return new MovieEntity( details.getVote_count(),
+                                details.getId(),
+                                details.isVideo(),
+                                details.getVote_average(),
+                                details.getTitle(),
+                                details.getPopularity(),
+                                details.getPoster_path(),
+                                details.getOriginal_language(),
+                                details.getOriginal_title(),
+                                details.getBackdrop_path(),
+                                details.isAdult(),
+                                details.getOverview(),
+                                details.getRelease_date());
     }
 }

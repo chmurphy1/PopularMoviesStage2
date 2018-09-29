@@ -19,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemSelected;
 import murphy.christopher.popularmoviesstage1.adapters.PageAdapter;
+import murphy.christopher.popularmoviesstage1.database.PopularMovieDB;
 import murphy.christopher.popularmoviesstage1.interfaces.TaskDelegate;
 import murphy.christopher.popularmoviesstage1.model.Page;
 import murphy.christopher.popularmoviesstage1.util.Constants;
@@ -46,9 +47,12 @@ public class MainActivity extends AppCompatActivity {
     // networks calls.
     private boolean onUserInteraction;
 
+    private PopularMovieDB db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = PopularMovieDB.getInstance(getApplicationContext());
         setContentView(R.layout.activity_main);
 
         //Create a gridlayout manager and assign it to the recyclerview

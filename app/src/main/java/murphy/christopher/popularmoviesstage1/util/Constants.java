@@ -21,6 +21,7 @@ public class Constants {
     public static final String TRAILER_KEY = "movie_trailer";
     public static final String MOVIE_TITLE = "title";
     public static final String BLANKS = "";
+    public static final String DB_NAME = "Popular Movie DB";
 
     public static final int FAVORITES = 2;
     public static final int TOP_RATED = 1;
