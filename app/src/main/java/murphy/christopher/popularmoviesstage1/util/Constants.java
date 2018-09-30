@@ -11,8 +11,9 @@ public class Constants {
     public static final String MOVIE_URL_W185 = "http://image.tmdb.org/t/p/w185/";
     public static final String MOVIE_KEY = "movie_details";
     public static final String PAGE_ADAPTER = "page_adapter";
+    public static final String REVIEW_ADAPTER = "review_adapter";
+    public static final String TRAILER_ADAPTER = "trailer_adapter";
     public static final String SPINNER_POSITION = "spinner_position";
-    public static final String SCREEN_POSITION_KEY = "isHorizontal";
     public static final String MOVIE_ID = "movie_id";
     public static final String MOVIE_REVIEWS = "movie_reviews";
     public static final String MOVIE_TRAILERS = "movie_trailers";

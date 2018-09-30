@@ -33,6 +33,7 @@ public class MovieReviewsFragment extends Fragment {
     private int movieId;
 
     private MovieReviews reviews;
+    private ReviewAdapter rAdapter;
 
     @BindView(R.id.ReviewRecycler)
     RecyclerView mReviewRecylcer;
@@ -47,6 +48,7 @@ public class MovieReviewsFragment extends Fragment {
         }else if(savedInstanceState != null){
             this.movieId = savedInstanceState.getInt(Constants.MOVIE_ID);
             this.reviews = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_REVIEWS));
+            rAdapter = Parcels.unwrap(savedInstanceState.getParcelable(Constants.REVIEW_ADAPTER));
         }
     }
 
@@ -66,9 +68,13 @@ public class MovieReviewsFragment extends Fragment {
         LinearLayoutManager layoutmanager = new LinearLayoutManager(getContext());
         mReviewRecylcer.setLayoutManager(layoutmanager);
         mReviewRecylcer.setHasFixedSize(true);
-        mReviewRecylcer.setAdapter(new ReviewAdapter());
 
-        getMovieReviews(this.movieId);
+        if(rAdapter != null){
+            mReviewRecylcer.setAdapter(rAdapter);
+        }else{
+            mReviewRecylcer.setAdapter(new ReviewAdapter());
+            getMovieReviews(this.movieId);
+        }
     }
 
     @Override
@@ -77,6 +83,7 @@ public class MovieReviewsFragment extends Fragment {
 
         outState.putInt(Constants.MOVIE_ID, movieId);
         outState.putParcelable(Constants.MOVIE_REVIEWS, Parcels.wrap(reviews));
+        outState.putParcelable(Constants.REVIEW_ADAPTER , Parcels.wrap(rAdapter));
     }
 
     public void getMovieReviews(int id){
@@ -98,8 +105,8 @@ public class MovieReviewsFragment extends Fragment {
                         ReviewResults noResults = new ReviewResults(Constants.NO_REVIEWS);
                         reviews.getResults().add(noResults);
                     }
-                    ReviewAdapter ra = new ReviewAdapter(reviews);
-                    mReviewRecylcer.setAdapter(ra);
+                    rAdapter = new ReviewAdapter(reviews);
+                    mReviewRecylcer.setAdapter(rAdapter);
                 }
 
                 @Override

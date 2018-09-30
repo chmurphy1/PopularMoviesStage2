@@ -6,11 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import org.parceler.Parcel;
+
 import murphy.christopher.popularmoviesstage1.R;
 import murphy.christopher.popularmoviesstage1.model.MovieTrailer;
 import murphy.christopher.popularmoviesstage1.view_holders.ReviewViewHolder;
 import murphy.christopher.popularmoviesstage1.view_holders.TrailerViewHolder;
 
+@Parcel(Parcel.Serialization.BEAN)
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
 
     private MovieTrailer trailers;

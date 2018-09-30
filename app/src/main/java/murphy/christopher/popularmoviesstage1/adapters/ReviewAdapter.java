@@ -6,10 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import org.parceler.Parcel;
+
 import murphy.christopher.popularmoviesstage1.R;
 import murphy.christopher.popularmoviesstage1.model.MovieReviews;
 import murphy.christopher.popularmoviesstage1.view_holders.ReviewViewHolder;
 
+@Parcel(Parcel.Serialization.BEAN)
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
 
     private MovieReviews reviews;

@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import org.parceler.Parcels;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +38,8 @@ public class MovieTrailersFragment extends Fragment {
     @BindView(R.id.TrailerRecycler)
     RecyclerView mTrailerRecylcer;
 
+    private TrailerAdapter tAdapter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +51,7 @@ public class MovieTrailersFragment extends Fragment {
         }else if(savedInstanceState != null){
             this.movieId = savedInstanceState.getInt(Constants.MOVIE_ID);
             this.trailers = Parcels.unwrap(savedInstanceState.getParcelable(Constants.MOVIE_TRAILERS));
+            this.tAdapter = Parcels.unwrap(savedInstanceState.getParcelable(Constants.TRAILER_ADAPTER));
         }
     }
     @Override
@@ -59,6 +60,7 @@ public class MovieTrailersFragment extends Fragment {
 
         outState.putInt(Constants.MOVIE_ID, movieId);
         outState.putParcelable(Constants.MOVIE_TRAILERS, Parcels.wrap(trailers));
+        outState.putParcelable(Constants.TRAILER_ADAPTER, Parcels.wrap(tAdapter));
     }
 
     @Nullable
@@ -75,7 +77,7 @@ public class MovieTrailersFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         //Create a gridlayout manager and assign it to the recyclerview
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+       if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             GridLayoutManager layoutmanager = new GridLayoutManager(getContext(), 1, LinearLayoutManager.HORIZONTAL, false);
             mTrailerRecylcer.setLayoutManager(layoutmanager);
         }
@@ -85,9 +87,14 @@ public class MovieTrailersFragment extends Fragment {
         }
 
         mTrailerRecylcer.setHasFixedSize(true);
-        mTrailerRecylcer.setAdapter(new TrailerAdapter());
 
-        getMovieTrailers(this.movieId);
+        if(tAdapter != null){
+            mTrailerRecylcer.setAdapter(tAdapter);
+        }
+        else {
+            mTrailerRecylcer.setAdapter(new TrailerAdapter());
+            getMovieTrailers(this.movieId);
+        }
     }
 
 
@@ -112,8 +119,8 @@ public class MovieTrailersFragment extends Fragment {
                             noTrailerResults.setName(Constants.NO_TRAILERS);
                             trailers.getResults().add(noTrailerResults);
                         }
-                        TrailerAdapter ta = new TrailerAdapter(trailers);
-                        mTrailerRecylcer.setAdapter(ta);
+                        tAdapter = new TrailerAdapter(trailers);
+                        mTrailerRecylcer.setAdapter(tAdapter);
                     }
                 }
 
