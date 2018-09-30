@@ -2,6 +2,7 @@ package murphy.christopher.popularmoviesstage1;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
@@ -31,6 +32,7 @@ import murphy.christopher.popularmoviesstage1.model.Page;
 import murphy.christopher.popularmoviesstage1.util.Constants;
 import murphy.christopher.popularmoviesstage1.util.ConversionTools;
 import murphy.christopher.popularmoviesstage1.util.task.MovieTask;
+import murphy.christopher.popularmoviesstage1.view_models.MovieViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnItemSelected(R.id.search_type)
-    public void spinnerItemSelected(Spinner spinner, final int position) {
+    public void spinnerItemSelected(final Spinner spinner, final int position) {
         if (onUserInteraction) {
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setHasFixedSize(true);
@@ -141,15 +143,15 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, R.string.network_error, Toast.LENGTH_LONG);
                 }
             }else if(position == Constants.FAVORITES){
-                final LiveData<List<MovieEntity>> movies = db.movieDao().getAllMovies();
-                movies.observe(this, new Observer<List<MovieEntity>>() {
+                MovieViewModel vm = ViewModelProviders.of(this).get(MovieViewModel.class);
+
+                vm.getMovies().observe(this, new Observer<List<MovieEntity>>() {
                     @Override
                     public void onChanged(@Nullable List<MovieEntity> movieEntities) {
-                        ArrayList<Movie> favoriteMovies = ConversionTools.convertToMovies(movieEntities);
-                        final Page newPage = new Page();
-                        newPage.setResults(favoriteMovies);
-
-                        if(position == Constants.FAVORITES) {
+                        if(spinner.getSelectedItemPosition() == Constants.FAVORITES) {
+                            ArrayList<Movie> favoriteMovies = ConversionTools.convertToMovies(movieEntities);
+                            Page newPage = new Page();
+                            newPage.setResults(favoriteMovies);
                             mAdapter = new PageAdapter(newPage);
                             mRecyclerView.setAdapter(mAdapter);
                         }
