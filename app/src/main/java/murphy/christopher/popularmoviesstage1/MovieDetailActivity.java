@@ -101,11 +101,6 @@ public class MovieDetailActivity extends AppCompatActivity {
                 }
             });
         }
-        else if(dbMovieInfo != null){
-            MenuItem fav = menu.getItem(0);
-            fav.setIcon(android.R.drawable.btn_star_big_on);
-            fav.setChecked(true);
-        }
         return super.onCreateOptionsMenu(menu);
     }
 
